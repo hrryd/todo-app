@@ -10,3 +10,18 @@ export const todoItemComplete = (payload: TodoItemModel) => ({
     type: TODO_ITEM_COMPLETE,
     payload,
 });
+
+export const todoItemDelete = (payload: TodoItemModel) => ({
+    type: TODO_ITEM_DELETE,
+    payload,
+});
+
+export const todoItemMoveUp = (payload: TodoItemModel) => ({
+    type: TODO_ITEM_MOVE_UP,
+    payload,
+});
+
+export const todoItemMoveDown = (payload: TodoItemModel) => ({
+    type: TODO_ITEM_MOVE_DOWN,
+    payload,
+});

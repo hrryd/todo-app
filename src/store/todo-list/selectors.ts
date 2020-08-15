@@ -3,10 +3,10 @@ import { TodoListState } from './reducers';
 
 const getVisibilityFilter = (state: TodoListState) => 'SHOW_ACTIVE';
 
-const getTodos = (state: TodoListState) => Object.values(state.todosById);
+const getTodosSorted = (state: TodoListState) => state.todoIds.map(id => state.todosById[id]);
 
 export const getVisibleTodos = createSelector(
-    [getVisibilityFilter, getTodos],
+    [getVisibilityFilter, getTodosSorted],
     (visibilityFilter, todos) => {
         switch (visibilityFilter) {
             case 'SHOW_ALL':

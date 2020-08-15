@@ -3,10 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, Typography, IconButton } from '@material-ui/core';
 import { Check, ArrowUpward, ArrowDownward, Delete } from '@material-ui/icons';
 import { TodoItemModel } from '../models/todo-item.model';
+import { TodoHandlers } from './TodoList';
 
 type TodoItemProps = {
     todoItem: TodoItemModel;
-    onTodoClick: (todoItem: TodoItemModel) => void;
+    handlers: TodoHandlers;
 };
 
 function TodoItem(props: TodoItemProps) {
@@ -25,19 +26,32 @@ function TodoItem(props: TodoItemProps) {
                 </CardContent>
                 <div className={classes.controls}>
                     <IconButton
-                        aria-label="previous"
-                        onClick={() => props.onTodoClick(props.todoItem)}
+                        onClick={() =>
+                            props.handlers.onTodoComplete(props.todoItem)
+                        }
                         disabled={props.todoItem.complete}
                     >
                         <Check />
                     </IconButton>
-                    <IconButton aria-label="previous">
+                    <IconButton
+                        onClick={() =>
+                            props.handlers.onTodoMoveUp(props.todoItem)
+                        }
+                    >
                         <ArrowUpward />
                     </IconButton>
-                    <IconButton aria-label="previous">
+                    <IconButton
+                        onClick={() =>
+                            props.handlers.onTodoMoveDown(props.todoItem)
+                        }
+                    >
                         <ArrowDownward />
                     </IconButton>
-                    <IconButton aria-label="previous">
+                    <IconButton
+                        onClick={() =>
+                            props.handlers.onTodoDelete(props.todoItem)
+                        }
+                    >
                         <Delete />
                     </IconButton>
                 </div>
