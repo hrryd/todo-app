@@ -1,4 +1,4 @@
-import { TodoItemModel } from "../models/todo-item.model";
+import { TodoItemModel } from '../../models/todo-item.model';
 
 export const TODO_ITEM_CREATE = 'TODO_ITEM/CREATED';
 export const TODO_ITEM_COMPLETE = 'TODO_ITEM/COMPLETE';

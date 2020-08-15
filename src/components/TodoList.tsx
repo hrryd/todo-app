@@ -6,17 +6,20 @@ import { Box } from '@material-ui/core';
 type TodoListProps = {
     todoList: TodoItemModel[];
     onTodoClick: (todoItem: TodoItemModel) => void;
-}
+};
 
 function TodoList(props: TodoListProps) {
-
     return (
         <Box>
-            {props.todoList.map((todoItem, i) =>
+            {props.todoList.map((todoItem, i) => (
                 <Box mt={2} mb={2}>
-                    <TodoItem key={i} todoItem={todoItem} onTodoClick={props.onTodoClick} />
+                    <TodoItem
+                        key={i}
+                        todoItem={todoItem}
+                        onTodoClick={props.onTodoClick}
+                    />
                 </Box>
-            )}
+            ))}
         </Box>
     );
 }
