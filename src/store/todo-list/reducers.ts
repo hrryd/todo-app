@@ -1,11 +1,16 @@
-import { TODO_ITEM_COMPLETE, TODO_ITEM_DELETE, TODO_ITEM_MOVE_UP, TODO_ITEM_MOVE_DOWN } from './actions';
+import {
+    TODO_ITEM_COMPLETE,
+    TODO_ITEM_DELETE,
+    TODO_ITEM_MOVE_UP,
+    TODO_ITEM_MOVE_DOWN,
+} from './actions';
 import { TodoItemModel } from '../../models/todo-item.model';
 import { AnyAction } from 'redux';
 
 export enum VisibilityFilter {
     SHOW_ALL,
     SHOW_COMPLETED,
-    SHOW_ACTIVE
+    SHOW_ACTIVE,
 }
 
 export interface TodoListState {
@@ -51,27 +56,46 @@ export default (
     let newState = { ...state };
     switch (action.type) {
         case TODO_ITEM_COMPLETE:
-            newState.todosById[action.payload.id].complete = true;
-            deleteElem(newState.todoIds, action.payload.id);
-            newState.todoCompleteIds.push(action.payload.id);
+            completeItem(newState, action.payload);
             break;
         case TODO_ITEM_DELETE:
-            delete newState.todosById[action.payload.id];
-            if (action.payload.complete) {
-                deleteElem(newState.todoCompleteIds, action.payload.id);
-            } else {
-                deleteElem(newState.todoIds, action.payload.id);
-            }
+            deleteItem(newState, action.payload);
             break;
         case TODO_ITEM_MOVE_UP:
-            moveIndex(newState.todoIds, newState.todoIds.indexOf(action.payload.id), 1);
+            moveItem(newState, action.payload, 1);
             break;
         case TODO_ITEM_MOVE_DOWN:
-            moveIndex(newState.todoIds, newState.todoIds.indexOf(action.payload.id), -1);
+            moveItem(newState, action.payload, -1);
             break;
     }
     return newState;
 };
+
+const completeItem = (state: TodoListState, todoItem: TodoItemModel) => {
+    state.todosById[todoItem.id].complete = true;
+    deleteElem(state.todoIds, todoItem.id);
+    state.todoCompleteIds.push(todoItem.id);
+
+}
+
+const deleteItem = (state: TodoListState, todoItem: TodoItemModel) => {
+    let idList = getIdList(state, todoItem);
+    delete state.todosById[todoItem.id];
+    deleteElem(idList, todoItem.id);
+}
+
+const moveItem = (state: TodoListState, todoItem: TodoItemModel, direction: number) => {
+    let idList = getIdList(state, todoItem);
+    moveIndex(
+        idList,
+        idList.indexOf(todoItem.id),
+        direction
+    );
+}
+
+const getIdList = (state: TodoListState, todoItem: TodoItemModel) => {
+    return todoItem.complete ? state.todoCompleteIds : state.todoIds;
+}
 
 const moveIndex = (arr: Array<any>, index: number, direction: number) => {
     let newIndex = index - direction;
@@ -80,23 +104,23 @@ const moveIndex = (arr: Array<any>, index: number, direction: number) => {
     }
 
     return swap(arr, newIndex, index);
-}
+};
 
 const isAtEnd = (arr: Array<any>, index: number) => {
     return index < 0 || index >= arr.length;
-}
+};
 
 const swap = (arr: Array<any>, a: number, b: number) => {
     let temp = arr[a];
     arr[a] = arr[b];
     arr[b] = temp;
     return arr;
-}
+};
 
 const deleteIndex = (arr: Array<any>, index: number) => {
     return arr.splice(index, 1);
-}
+};
 
 const deleteElem = <T>(arr: Array<T>, elem: T) => {
     return deleteIndex(arr, arr.indexOf(elem));
-}
+};

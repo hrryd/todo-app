@@ -1,9 +1,12 @@
 import { createSelector } from 'reselect';
 import { TodoListState } from './reducers';
 
-const getVisibilityFilter = (state: TodoListState) => 'SHOW_ACTIVE';
+const getVisibilityFilter = (state: TodoListState) => 'SHOW_ALL';
 
-const getTodosSorted = (state: TodoListState) => state.todoIds.map(id => state.todosById[id]);
+const getTodosSorted = (state: TodoListState) =>
+    state.todoIds
+        .map((id) => state.todosById[id])
+        .concat(state.todoCompleteIds.map((id) => state.todosById[id]));
 
 export const getVisibleTodos = createSelector(
     [getVisibilityFilter, getTodosSorted],
