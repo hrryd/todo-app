@@ -3,15 +3,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, Typography, IconButton } from '@material-ui/core';
 import { Check, ArrowUpward, ArrowDownward, Delete } from '@material-ui/icons';
 import { TodoItemModel } from '../models/todo-item.model';
-import { TodoHandlers } from './TodoList';
+import {
+    todoItemComplete,
+    todoItemDelete,
+    todoItemMoveUp,
+    todoItemMoveDown,
+} from '../store/todo-list/actions';
+import { useDispatch } from 'react-redux';
 
 type TodoItemProps = {
     todoItem: TodoItemModel;
-    handlers: TodoHandlers;
 };
 
 function TodoItem(props: TodoItemProps) {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     return (
         <Card className={classes.root}>
@@ -27,30 +33,26 @@ function TodoItem(props: TodoItemProps) {
                 <div className={classes.controls}>
                     <IconButton
                         onClick={() =>
-                            props.handlers.onTodoComplete(props.todoItem)
+                            dispatch(todoItemComplete(props.todoItem))
                         }
                         disabled={props.todoItem.complete}
                     >
                         <Check />
                     </IconButton>
                     <IconButton
-                        onClick={() =>
-                            props.handlers.onTodoMoveUp(props.todoItem)
-                        }
+                        onClick={() => dispatch(todoItemMoveUp(props.todoItem))}
                     >
                         <ArrowUpward />
                     </IconButton>
                     <IconButton
                         onClick={() =>
-                            props.handlers.onTodoMoveDown(props.todoItem)
+                            dispatch(todoItemMoveDown(props.todoItem))
                         }
                     >
                         <ArrowDownward />
                     </IconButton>
                     <IconButton
-                        onClick={() =>
-                            props.handlers.onTodoDelete(props.todoItem)
-                        }
+                        onClick={() => dispatch(todoItemDelete(props.todoItem))}
                     >
                         <Delete />
                     </IconButton>

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
-import { TodoListState } from './reducers';
+import { TodoListState, VisibilityFilter } from './reducers';
 
-const getVisibilityFilter = (state: TodoListState) => 'SHOW_ALL';
+const getVisibilityFilter = (state: TodoListState) => state.visibiltyFilter;
 
 const getTodosSorted = (state: TodoListState) =>
     state.todoIds
@@ -12,11 +12,11 @@ export const getVisibleTodos = createSelector(
     [getVisibilityFilter, getTodosSorted],
     (visibilityFilter, todos) => {
         switch (visibilityFilter) {
-            case 'SHOW_ALL':
+            case VisibilityFilter.SHOW_ALL:
                 return todos;
-            case 'SHOW_COMPLETED':
+            case VisibilityFilter.SHOW_COMPLETED:
                 return todos.filter((t) => t.complete);
-            case 'SHOW_ACTIVE':
+            case VisibilityFilter.SHOW_ACTIVE:
                 return todos.filter((t) => !t.complete);
             default:
                 return [];

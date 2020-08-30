@@ -3,14 +3,15 @@ import {
     TODO_ITEM_DELETE,
     TODO_ITEM_MOVE_UP,
     TODO_ITEM_MOVE_DOWN,
+    TODO_FILTER_CHANGE_STATE,
 } from './actions';
 import { TodoItemModel } from '../../models/todo-item.model';
 import { AnyAction } from 'redux';
 
 export enum VisibilityFilter {
-    SHOW_ALL,
-    SHOW_COMPLETED,
-    SHOW_ACTIVE,
+    SHOW_ALL = 'all',
+    SHOW_COMPLETED = 'completed',
+    SHOW_ACTIVE = 'active',
 }
 
 export interface TodoListState {
@@ -67,6 +68,9 @@ export default (
         case TODO_ITEM_MOVE_DOWN:
             moveItem(newState, action.payload, -1);
             break;
+        case TODO_FILTER_CHANGE_STATE:
+            newState.visibiltyFilter = action.payload;
+            break;
     }
     return newState;
 };
@@ -75,27 +79,26 @@ const completeItem = (state: TodoListState, todoItem: TodoItemModel) => {
     state.todosById[todoItem.id].complete = true;
     deleteElem(state.todoIds, todoItem.id);
     state.todoCompleteIds.push(todoItem.id);
-
-}
+};
 
 const deleteItem = (state: TodoListState, todoItem: TodoItemModel) => {
     let idList = getIdList(state, todoItem);
     delete state.todosById[todoItem.id];
     deleteElem(idList, todoItem.id);
-}
+};
 
-const moveItem = (state: TodoListState, todoItem: TodoItemModel, direction: number) => {
+const moveItem = (
+    state: TodoListState,
+    todoItem: TodoItemModel,
+    direction: number
+) => {
     let idList = getIdList(state, todoItem);
-    moveIndex(
-        idList,
-        idList.indexOf(todoItem.id),
-        direction
-    );
-}
+    moveIndex(idList, idList.indexOf(todoItem.id), direction);
+};
 
 const getIdList = (state: TodoListState, todoItem: TodoItemModel) => {
     return todoItem.complete ? state.todoCompleteIds : state.todoIds;
-}
+};
 
 const moveIndex = (arr: Array<any>, index: number, direction: number) => {
     let newIndex = index - direction;
